@@ -7,6 +7,9 @@ __version__ = '0.1.0'
 __author__ = 'Hideo Hattroi <syobosyobo@gmail.com>'
 __license__ = 'NewBSDLicense'
 
+OK_COLOR = "[32m%s[0m"
+FAIL_COLOR = "[31m%s[0m"
+ERROR_COLOR = "[33m%s[0m"
 
 def parse_result_line(line):
     err = False
@@ -18,25 +21,25 @@ def parse_result_line(line):
     if err and fail:
         f = line.split('=')[1].split(',')[0]
         e = line.split('=')[2].split(')')[0]
-        result = "([31mfailures[0m=[31m%s[0m, " % f
-        result += "[33merrors[0m=[33m%s[0m)" % e
+        result = "(" + FAIL_COLOR % "failures" + "=" + FAIL_COLOR % f + ", "
+        result += ERROR_COLOR % "errors" + "=" + ERROR_COLOR % e + ")"
     elif err and not fail:
         l = line.split('=')[1].split(')')[0]
-        result = "([31mfailures[0m=[31m%s[0m)" % l
+        result = "(" + FAIL_COLOR % "failures" + "=" + FAIL_COLOR % l
     elif not err and fail:
         l = line.split('=')[1].split(')')[0]
-        result = "([33merrors[0m=[33m%s[0m)" % l
-    return "[31mFAILED[0m " + result
+        result = "(" + ERROR_COLOR % "errors" + "=" + ERROR_COLOR % l
+    return FAIL_COLOR % "FAILED" + " %s" % result
 
 def parse_lineone(line):
     result = []
     for l in line:
         if '.' == l:
-            result.append("[32m.[0m")
+            result.append(OK_COLOR % ".")
         elif 'E' == l:
-            result.append("[33mE[0m")
+            result.append(ERROR_COLOR % "E")
         else:
-            result.append("[31mF[0m")
+            result.append(FAIL_COLOR % "F")
     return "".join(result)
 
 def parse_unittest_result(lines):
@@ -49,13 +52,13 @@ def parse_unittest_result(lines):
     result.append(parse_lineone(lines[0]))
     for line in lines[1:]:
         if ok.match(line):
-            r = "[32mOK[00m\n"
+            r = OK_COLOR % "OK" + "\n"
         elif failed.match(line):
             r = parse_result_line(line)
         elif fail.match(line):
-            r = "[31mFAIL[00m%s" % line[4:]
+            r = FAIL_COLOR % "FAIL" + line[4:]
         elif err.match(line):
-            r = "[33mERROR[00m%s" % line[5:]
+            r = ERROR_COLOR % "ERROR" + line[5:]
         else:
             r = line
         result.append(r)
