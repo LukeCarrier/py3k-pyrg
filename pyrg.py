@@ -3,7 +3,7 @@ from subprocess import *
 import sys
 import re
 
-__version__ = '0.1.0'
+__version__ = '0.1.1'
 __author__ = 'Hideo Hattroi <syobosyobo@gmail.com>'
 __license__ = 'NewBSDLicense'
 
@@ -48,8 +48,7 @@ def parse_unittest_result(lines):
     fail = re.compile("FAIL:")
     ok = re.compile("OK")
     failed = re.compile("FAILED")
-    lines = lines.split('\n')
-    result.append(parse_lineone(lines[0]))
+    result.append(parse_lineone(lines[0])+'\n')
     for line in lines[1:]:
         if ok.match(line):
             r = OK_COLOR % "OK" + "\n"
@@ -62,7 +61,7 @@ def parse_unittest_result(lines):
         else:
             r = line
         result.append(r)
-    return "\n".join(result)
+    return "".join(result)
 
 def main():
     if sys.argv[1:]:
@@ -70,7 +69,7 @@ def main():
         r = p.communicate()[1]
         print parse_unittest_result(r)
     else:
-        print parse_unittest_result(sys.stdin.read())
+        print parse_unittest_result(sys.stdin.readlines())
 
 
 if __name__ == '__main__':
