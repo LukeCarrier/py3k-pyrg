@@ -67,7 +67,7 @@ def main():
     if sys.argv[1:]:
         p = Popen(['python', sys.argv[1]], stdout=PIPE, stderr=PIPE)
         r = p.communicate()[1]
-        print parse_unittest_result(r)
+        print parse_unittest_result(r.splitlines(1))
     else:
         print parse_unittest_result(sys.stdin.readlines())
 
