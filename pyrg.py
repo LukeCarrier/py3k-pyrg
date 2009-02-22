@@ -26,7 +26,7 @@ def parse_result_line(line):
     elif not err and fail:
         l = line.split('=')[1].split(')')[0]
         result = "([33merrors[0m=[33m%s[0m)" % l
-    return "FAILED " + result
+    return "[31mFAILED[0m " + result
 
 def parse_lineone(line):
     result = []
