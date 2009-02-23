@@ -38,8 +38,10 @@ def parse_lineone(line):
             result.append(OK_COLOR % ".")
         elif 'E' == l:
             result.append(ERROR_COLOR % "E")
-        else:
+        elif 'F' == l:
             result.append(FAIL_COLOR % "F")
+        else:
+            result.append(l)
     return "".join(result)
 
 def parse_unittest_result(lines):
