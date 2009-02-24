@@ -23,16 +23,17 @@ def parse_result_line(line):
         e = line.split('=')[2].split(')')[0]
         result = "(" + FAIL_COLOR % "failures" + "=" + FAIL_COLOR % f + ", "
         result += ERROR_COLOR % "errors" + "=" + ERROR_COLOR % e + ")"
+    elif fail and not err:
+        l = line.split('=')[1].split(')')[0]
+        result = "(" + FAIL_COLOR % "failures" + "=" + FAIL_COLOR % l + ")"
     elif err and not fail:
         l = line.split('=')[1].split(')')[0]
-        result = "(" + FAIL_COLOR % "failures" + "=" + FAIL_COLOR % l
-    elif not err and fail:
-        l = line.split('=')[1].split(')')[0]
-        result = "(" + ERROR_COLOR % "errors" + "=" + ERROR_COLOR % l
+        result = "(" + ERROR_COLOR % "errors" + "=" + ERROR_COLOR % l + ")"
     return FAIL_COLOR % "FAILED" + " %s" % result
 
 def parse_lineone(line):
     result = []
+    line = line.strip()
     for l in line:
         if '.' == l:
             result.append(OK_COLOR % ".")
