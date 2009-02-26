@@ -3,13 +3,14 @@ from subprocess import *
 import sys
 import re
 
-__version__ = '0.1.1'
+__version__ = '0.1.2'
 __author__ = 'Hideo Hattroi <syobosyobo@gmail.com>'
 __license__ = 'NewBSDLicense'
 
 OK_COLOR = "[32m%s[0m"
 FAIL_COLOR = "[31m%s[0m"
 ERROR_COLOR = "[33m%s[0m"
+FUNC_COLOR = "[36m%s[0m"
 
 def parse_result_line(line):
     err = False
@@ -45,6 +46,9 @@ def parse_lineone(line):
             result.append(l)
     return "".join(result)
 
+def coloring_method(line):
+    return FUNC_COLOR % line
+
 def parse_unittest_result(lines):
     result = []
     err = re.compile("ERROR:")
@@ -58,9 +62,9 @@ def parse_unittest_result(lines):
         elif failed.match(line):
             r = parse_result_line(line)
         elif fail.match(line):
-            r = FAIL_COLOR % "FAIL" + line[4:]
+            r = FAIL_COLOR % "FAIL" + ":" + coloring_method(line[5:])
         elif err.match(line):
-            r = ERROR_COLOR % "ERROR" + line[5:]
+            r = ERROR_COLOR % "ERROR" + ":" + coloring_method(line[6:])
         else:
             r = line
         result.append(r)
