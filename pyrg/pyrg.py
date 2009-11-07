@@ -5,8 +5,8 @@ from select import poll, POLLIN
 import sys
 import re
 
-__version__ = '0.2.0'
-__author__ = 'Hideo Hattroi <syobosyobo@gmail.com>'
+__version__ = '0.2.1'
+__author__ = 'Hideo Hattroi <hhatto.jp@gmail.com>'
 __license__ = 'NewBSDLicense'
 
 OK_COLOR = "[32m%s[0m"
