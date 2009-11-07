@@ -1,10 +1,11 @@
 #!/usr/bin/env python
-from subprocess import *
+"""pyrg - colorized Python's UnitTest Result Tool"""
+from subprocess import Popen, PIPE
 from select import poll, POLLIN
 import sys
 import re
 
-__version__ = '0.1.2'
+__version__ = '0.1.3'
 __author__ = 'Hideo Hattroi <syobosyobo@gmail.com>'
 __license__ = 'NewBSDLicense'
 
@@ -36,47 +37,51 @@ def parse_result_line(line):
 
 
 def parse_lineone(line):
-    result = []
+    """test result parser"""
+    results = []
     line = line.strip()
-    for l in line:
-        if '.' == l:
-            result.append(OK_COLOR % ".")
-        elif 'E' == l:
-            result.append(ERROR_COLOR % "E")
-        elif 'F' == l:
-            result.append(FAIL_COLOR % "F")
+    for char in line:
+        if '.' == char:
+            results.append(OK_COLOR % ".")
+        elif 'E' == char:
+            results.append(ERROR_COLOR % "E")
+        elif 'F' == char:
+            results.append(FAIL_COLOR % "F")
         else:
-            result.append(l)
-    return "".join(result)
+            results.append(char)
+    return "".join(results)
 
 
 def coloring_method(line):
+    """colorized method line"""
     return FUNC_COLOR % line
 
 
 def parse_unittest_result(lines):
-    result = []
+    """execute main"""
+    results = []
     err = re.compile("ERROR:")
     fail = re.compile("FAIL:")
     ok = re.compile("OK")
     failed = re.compile("FAILED")
-    result.append(parse_lineone(lines[0])+'\n')
+    results.append(parse_lineone(lines[0])+'\n')
     for line in lines[1:]:
         if ok.match(line):
-            r = OK_COLOR % "OK"
+            result = OK_COLOR % "OK"
         elif failed.match(line):
-            r = parse_result_line(line)
+            result = parse_result_line(line)
         elif fail.match(line):
-            r = FAIL_COLOR % "FAIL" + ":" + coloring_method(line[5:])
+            result = FAIL_COLOR % "FAIL" + ":" + coloring_method(line[5:])
         elif err.match(line):
-            r = ERROR_COLOR % "ERROR" + ":" + coloring_method(line[6:])
+            result = ERROR_COLOR % "ERROR" + ":" + coloring_method(line[6:])
         else:
-            r = line
-        result.append(r)
-    return "".join(result)
+            result = line
+        results.append(result)
+    return "".join(results)
 
 
 def main():
+    """command line wrapper"""
     if sys.argv[1:]:
         p = Popen(['python', sys.argv[1]], stdout=PIPE, stderr=PIPE)
         r = p.communicate()[1]
@@ -87,10 +92,12 @@ def main():
         if len(poller.poll(1)) >= 1:
             print parse_unittest_result(sys.stdin.readlines())
         else:
+            print __doc__
+            print "version:", __version__
             print "usage: pyrg pythontest.py"
             print "       python pythontest.py |& pyrg"
             print ""
-
+    return 0
 
 if __name__ == '__main__':
-    main()
+    sys.exit(main())
