@@ -12,6 +12,7 @@ FAIL_COLOR = "[31m%s[0m"
 ERROR_COLOR = "[33m%s[0m"
 FUNC_COLOR = "[36m%s[0m"
 
+
 def parse_result_line(line):
     err = False
     fail = False
@@ -32,6 +33,7 @@ def parse_result_line(line):
         result = "(" + ERROR_COLOR % "errors" + "=" + ERROR_COLOR % l + ")"
     return FAIL_COLOR % "FAILED" + " %s" % result
 
+
 def parse_lineone(line):
     result = []
     line = line.strip()
@@ -46,8 +48,10 @@ def parse_lineone(line):
             result.append(l)
     return "".join(result)
 
+
 def coloring_method(line):
     return FUNC_COLOR % line
+
 
 def parse_unittest_result(lines):
     result = []
@@ -70,6 +74,7 @@ def parse_unittest_result(lines):
         result.append(r)
     return "".join(result)
 
+
 def main():
     if sys.argv[1:]:
         p = Popen(['python', sys.argv[1]], stdout=PIPE, stderr=PIPE)
@@ -81,4 +86,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-
