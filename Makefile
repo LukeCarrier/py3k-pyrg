@@ -8,4 +8,8 @@ tests:
 	python test/testall.py
 
 clean:
-	rm *.pyc
+	rm -rf build
+	rm -rf dist
+	rm -rf *.egg-info
+	rm -rf pyrg/*.egg-info
+	rm pyrg/*.pyc
