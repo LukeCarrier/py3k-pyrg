@@ -12,7 +12,7 @@ used to easy_install::
 
 Require
 =======
-* Python2.6+ (maybe Python2.4+ ...)
+* Python2.6+
 
 
 Usage
