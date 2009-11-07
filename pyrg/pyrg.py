@@ -63,7 +63,7 @@ def parse_unittest_result(lines):
     result.append(parse_lineone(lines[0])+'\n')
     for line in lines[1:]:
         if ok.match(line):
-            r = OK_COLOR % "OK" + "\n"
+            r = OK_COLOR % "OK"
         elif failed.match(line):
             r = parse_result_line(line)
         elif fail.match(line):
