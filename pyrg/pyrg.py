@@ -90,7 +90,8 @@ def main():
     else:
         poller = poll()
         poller.register(sys.stdin, POLLIN)
-        if len(poller.poll(1)) >= 1:
+        pollret = poller.poll(1)
+        if len(pollret) == 1 and pollret[0][1] & POLLIN:
             print parse_unittest_result(sys.stdin.readlines())
         else:
             print __doc__
