@@ -5,7 +5,7 @@ from select import poll, POLLIN
 import sys
 import re
 
-__version__ = '0.1.3'
+__version__ = '0.2.0'
 __author__ = 'Hideo Hattroi <syobosyobo@gmail.com>'
 __license__ = 'NewBSDLicense'
 
@@ -16,6 +16,7 @@ FUNC_COLOR = "[36m%s[0m"
 
 
 def parse_result_line(line):
+    """parse to test result when fail tests"""
     err = False
     fail = False
     if 'errors' in line:
@@ -37,7 +38,7 @@ def parse_result_line(line):
 
 
 def parse_lineone(line):
-    """test result parser"""
+    """parse to test result line1"""
     results = []
     line = line.strip()
     for char in line:
@@ -58,7 +59,7 @@ def coloring_method(line):
 
 
 def parse_unittest_result(lines):
-    """execute main"""
+    """parse test result"""
     results = []
     err = re.compile("ERROR:")
     fail = re.compile("FAIL:")
@@ -81,7 +82,7 @@ def parse_unittest_result(lines):
 
 
 def main():
-    """command line wrapper"""
+    """execute command line tool"""
     if sys.argv[1:]:
         p = Popen(['python', sys.argv[1]], stdout=PIPE, stderr=PIPE)
         r = p.communicate()[1]
@@ -97,7 +98,6 @@ def main():
             print "usage: pyrg pythontest.py"
             print "       python pythontest.py |& pyrg"
             print ""
-    return 0
 
 if __name__ == '__main__':
     sys.exit(main())

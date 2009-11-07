@@ -7,6 +7,10 @@ install:
 tests:
 	python test/testall.py
 
+pypireg:
+	python setup.py register
+	python setup.py sdist bdist_egg upload
+
 clean:
 	rm -rf build
 	rm -rf dist
