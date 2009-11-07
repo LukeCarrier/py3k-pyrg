@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 from subprocess import *
+from select import poll, POLLIN
 import sys
 import re
 
@@ -81,7 +82,14 @@ def main():
         r = p.communicate()[1]
         print parse_unittest_result(r.splitlines(1))
     else:
-        print parse_unittest_result(sys.stdin.readlines())
+        poller = poll()
+        poller.register(sys.stdin, POLLIN)
+        if len(poller.poll(1)) >= 1:
+            print parse_unittest_result(sys.stdin.readlines())
+        else:
+            print "usage: pyrg pythontest.py"
+            print "       python pythontest.py |& pyrg"
+            print ""
 
 
 if __name__ == '__main__':
