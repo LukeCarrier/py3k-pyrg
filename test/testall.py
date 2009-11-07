@@ -1,6 +1,7 @@
 import unittest
 import sys
-sys.path.append("/home/hattori/work/pyrg/")
+import os
+sys.path.insert(0, os.path.abspath("pyrg"))
 import pyrg
 
 
@@ -22,10 +23,9 @@ class ColorFunctionTest(unittest.TestCase):
         ----------------------------------------------------------------------
         Ran 2 tests in 0.000s
 
-        OK
-        """
-        self.assertEqual(pyrg.parse_unittest_result(input_strings.splitlines()),
-                         result_strings)
+        OK         """
+        ret = pyrg.parse_unittest_result(input_strings.splitlines())
+        self.assertEqual(ret, result_strings)
 
 
 if __name__ == '__main__':
