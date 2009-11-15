@@ -1,0 +1,5 @@
+[color]
+ok = green
+ng = red
+fail = yellow
+function = cyan
