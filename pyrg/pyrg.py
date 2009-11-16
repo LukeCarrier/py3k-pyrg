@@ -123,9 +123,9 @@ def main():
     """execute command line tool"""
     set_configration()
     if sys.argv[1:]:
-        p = Popen(['python', sys.argv[1]], stdout=PIPE, stderr=PIPE)
-        r = p.communicate()[1]
-        print parse_unittest_result(r.splitlines(1))
+        proc = Popen(['python', sys.argv[1]], stdout=PIPE, stderr=PIPE)
+        result = proc.communicate()[1]
+        print parse_unittest_result(result.splitlines(1))
     else:
         poller = poll()
         poller.register(sys.stdin, POLLIN)
