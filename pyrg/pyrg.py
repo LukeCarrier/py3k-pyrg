@@ -7,9 +7,13 @@ import sys
 import re
 import os
 
-__version__ = '0.2.1'
+__version__ = '0.2.2dev'
 __author__ = 'Hideo Hattroi <hhatto.jp@gmail.com>'
 __license__ = 'NewBSDLicense'
+
+__all__ = ['get_color', 'parse_result_line', 'parse_lineone',
+           'coloring_method', 'parse_unittest_result',
+           'get_configfile_path', 'set_configration']
 
 PRINT_COLOR_SET = {
         'ok': 'green',
@@ -46,6 +50,7 @@ COLOR_MAP = {
 
 
 def get_color(key):
+    """color name get from COLOR_MAP dict."""
     return COLOR_MAP[PRINT_COLOR_SET[key]]
 
 
