@@ -19,13 +19,29 @@ PRINT_COLOR_SET = {
 }
 COLOR_MAP = {
         'black': '[30m%s[0m',
+        'gray': '[1;30m%s[0m',
+        'black ': '[2;30m%s[0m',
         'red': '[31m%s[0m',
+        'pink': '[1;31m%s[0m',
+        'darkred': '[2;31m%s[0m',
         'green': '[32m%s[0m',
-        'yellow': '[33m%s[0m',  # TODO:fail??
+        'yellowgreen': '[1;32m%s[0m',
+        'darkgreen': '[2;32m%s[0m',
+        'brown': '[33m%s[0m',
+        'yellow': '[1;33m%s[0m',
+        'gold': '[2;33m%s[0m',
         'blue': '[34m%s[0m',
+        'lightblue': '[1;34m%s[0m',
+        'darkblue': '[2;34m%s[0m',
         'magenta': '[35m%s[0m',
+        'lightmagenta': '[1;35m%s[0m',
+        'darkmagenta': '[2;35m%s[0m',
         'cyan': '[36m%s[0m',
-        'white': '[37m%s[0m',
+        'lightcyan': '[1;36m%s[0m',
+        'darkcyan': '[2;36m%s[0m',
+        'silver': '[37m%s[0m',
+        'white': '[1;37m%s[0m',
+        'darksilver': '[2;37m%s[0m',
         }
 
 
