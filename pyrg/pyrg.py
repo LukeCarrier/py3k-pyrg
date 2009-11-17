@@ -12,15 +12,15 @@ __author__ = 'Hideo Hattroi <hhatto.jp@gmail.com>'
 __license__ = 'NewBSDLicense'
 
 PRINT_COLOR_SET = {
-        'ok': '[32m%s[0m',
-        'fail': '[31m%s[0m',
-        'error': '[33m%s[0m',
-        'function': '[36m%s[0m',
+        'ok': 'green',
+        'fail': 'red',
+        'error': 'yellow',
+        'function': 'cyan',
 }
 COLOR_MAP = {
         'black': '[30m%s[0m',
         'gray': '[1;30m%s[0m',
-        'black ': '[2;30m%s[0m',
+        #'black ': '[2;30m%s[0m',   ## TODO:not worked?
         'red': '[31m%s[0m',
         'pink': '[1;31m%s[0m',
         'darkred': '[2;31m%s[0m',
@@ -45,6 +45,10 @@ COLOR_MAP = {
         }
 
 
+def get_color(key):
+    return COLOR_MAP[PRINT_COLOR_SET[key]]
+
+
 def parse_result_line(line):
     """parse to test result when fail tests"""
     err = False
@@ -56,19 +60,19 @@ def parse_result_line(line):
     if err and fail:
         f = line.split('=')[1].split(',')[0]
         e = line.split('=')[2].split(')')[0]
-        result = "(%s=%s. " % (PRINT_COLOR_SET['fail'] % "failures",
-                               PRINT_COLOR_SET['fail'] % f)
-        result += "%s=%s)" % (PRINT_COLOR_SET['error'] % "errors",
-                              PRINT_COLOR_SET['error'] % e)
+        result = "(%s=%s. " % (get_color('fail') % "failures",
+                               get_color('fail') % f)
+        result += "%s=%s)" % (get_color('error') % "errors",
+                              get_color('error') % e)
     elif fail and not err:
         l = line.split('=')[1].split(')')[0]
-        result = "(%s=%s)" % (PRINT_COLOR_SET['fail'] % "failures",
-                              PRINT_COLOR_SET['fail'] % l)
+        result = "(%s=%s)" % (get_color('fail') % "failures",
+                              get_color('fail') % l)
     elif err and not fail:
         l = line.split('=')[1].split(')')[0]
-        result = "(%s=%s)" % (PRINT_COLOR_SET['error'] % "errors",
-                              PRINT_COLOR_SET['error'] % l)
-    return PRINT_COLOR_SET['fail'] % "FAILED" + " %s" % result
+        result = "(%s=%s)" % (get_color('error') % "errors",
+                              get_color('error') % l)
+    return get_color('fail') % "FAILED" + " %s" % result
 
 
 def parse_lineone(line):
@@ -77,11 +81,11 @@ def parse_lineone(line):
     line = line.strip()
     for char in line:
         if '.' == char:
-            results.append(PRINT_COLOR_SET['ok'] % ".")
+            results.append(get_color('ok') % ".")
         elif 'E' == char:
-            results.append(PRINT_COLOR_SET['error'] % "E")
+            results.append(get_color('error') % "E")
         elif 'F' == char:
-            results.append(PRINT_COLOR_SET['fail'] % "F")
+            results.append(get_color('fail') % "F")
         else:
             results.append(char)
     return "".join(results)
@@ -89,7 +93,7 @@ def parse_lineone(line):
 
 def coloring_method(line):
     """colorized method line"""
-    return PRINT_COLOR_SET['function'] % line
+    return get_color('function') % line
 
 
 def parse_unittest_result(lines):
@@ -102,14 +106,14 @@ def parse_unittest_result(lines):
     results.append(parse_lineone(lines[0]) + '\n')
     for line in lines[1:]:
         if ok.match(line):
-            result = PRINT_COLOR_SET['ok'] % "OK"
+            result = get_color('ok') % "OK"
         elif failed.match(line):
             result = parse_result_line(line)
         elif fail.match(line):
-            result = "%s:%s" % (PRINT_COLOR_SET['fail'] % "FAIL",
+            result = "%s:%s" % (get_color('fail') % "FAIL",
                                 coloring_method(line[5:]))
         elif err.match(line):
-            result = "%s:%s" % (PRINT_COLOR_SET['error'] % "ERROR",
+            result = "%s:%s" % (get_color('error') % "ERROR",
                                 coloring_method(line[6:]))
         else:
             result = line
