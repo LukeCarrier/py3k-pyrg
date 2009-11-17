@@ -1,2 +1,5 @@
 ./*.pyc
 .*rope*
+.*egg-info*
+dist
+build
