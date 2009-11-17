@@ -7,7 +7,7 @@ import sys
 import re
 import os
 
-__version__ = '0.2.2dev'
+__version__ = '0.2.2'
 __author__ = 'Hideo Hattroi <hhatto.jp@gmail.com>'
 __license__ = 'NewBSDLicense'
 
