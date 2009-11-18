@@ -1,7 +1,12 @@
 ChangeLog
 =========
 
-version 0.2.2 (2009.XX.XX)
+version 0.2.3 (2009.XX.XX)
+--------------------------
+
+  - error hundling when non test execution.
+
+version 0.2.2 (2009.11.17)
 --------------------------
 
   - Featured printing color configuration.

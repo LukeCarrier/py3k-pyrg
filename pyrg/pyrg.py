@@ -7,7 +7,7 @@ import sys
 import re
 import os
 
-__version__ = '0.2.2'
+__version__ = '0.2.3dev'
 __author__ = 'Hideo Hattroi <hhatto.jp@gmail.com>'
 __license__ = 'NewBSDLicense'
 
@@ -108,6 +108,8 @@ def parse_unittest_result(lines):
     fail = re.compile("FAIL:")
     ok = re.compile("OK")
     failed = re.compile("FAILED")
+    if not lines:
+        return ""
     results.append(parse_lineone(lines[0]) + '\n')
     for line in lines[1:]:
         if ok.match(line):
