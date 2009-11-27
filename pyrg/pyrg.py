@@ -186,7 +186,9 @@ def set_configration():
 def get_optionparser():
     """return to optparse's OptionParser object."""
     parser = OptionParser(version="pyrg: %s" % __version__,
-                          usage="Usage: pyrg [options] [TEST_SCRIPT.py]")
+                          description=__doc__,
+                          usage="Usage: pyrg [options] TEST_SCRIPT.py\n"\
+                                "     : python TEST_SCRIPT.py |& pyrg")
     parser.add_option('-v', '--verbose', action='store_true',
                       dest='mode_verbose',
                       help='print to verbose result for unittest.')
@@ -214,11 +216,7 @@ def main():
         if len(pollret) == 1 and pollret[0][1] & POLLIN:
             print parse_unittest_result(sys.stdin.readlines())
         else:
-            print __doc__
-            print "version:", __version__
-            print "usage: pyrg pythontest.py"
-            print "       python pythontest.py |& pyrg"
-            print ""
+            print parser.print_help()
 
 if __name__ == '__main__':
     sys.exit(main())
