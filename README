@@ -3,6 +3,7 @@ About
 This script is colorized to Python's UnitTest Result.
 inspired by RedGreen(rg command)
 
+
 Install
 =======
 used to easy_install::
@@ -22,6 +23,12 @@ basic usage::
   $ pyrg TEST_SCRIPT.py
 
   $ python TEST_SCRIPT.py |& pyrg
+
+verbose print usage::
+
+  $ pyrg -v TEST_SCRIPT.py
+
+  $ python TEST_SCRIPT.py -v |& pyrg
 
 
 Configuration
