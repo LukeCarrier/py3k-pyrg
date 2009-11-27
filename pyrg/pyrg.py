@@ -7,6 +7,7 @@ from optparse import OptionParser
 import sys
 import re
 import os
+import pwd
 
 __version__ = '0.2.3dev'
 __author__ = 'Hideo Hattroi <hhatto.jp@gmail.com>'
@@ -167,7 +168,7 @@ def parse_unittest_result_verbose(lines):
 
 def get_configfile_path():
     """get $HOME/.pyrgrc path"""
-    return "/home/%s/.pyrgrc" % (os.getlogin())
+    return "/home/%s/.pyrgrc" % (pwd.getpwuid(os.getuid())[0])
 
 
 def set_configration():
