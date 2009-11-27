@@ -9,7 +9,7 @@ import re
 import os
 import pwd
 
-__version__ = '0.2.3'
+__version__ = '0.2.4dev'
 __author__ = 'Hideo Hattroi <hhatto.jp@gmail.com>'
 __license__ = 'NewBSDLicense'
 
@@ -195,6 +195,11 @@ def get_optionparser():
     return parser
 
 
+def check_verbose(line):
+    verbose = re.compile("(ok$|ERROR$|FAIL$)")
+    return verbose.search(line)
+
+
 def main():
     """execute command line tool"""
     set_configration()
@@ -214,7 +219,11 @@ def main():
         poller.register(sys.stdin, POLLIN)
         pollret = poller.poll(1)
         if len(pollret) == 1 and pollret[0][1] & POLLIN:
-            print parse_unittest_result(sys.stdin.readlines())
+            lines = sys.stdin.readlines()
+            if check_verbose(lines[0]):
+                print parse_unittest_result_verbose(lines)
+            else:
+                print parse_unittest_result(lines)
         else:
             print parser.print_help()
 
