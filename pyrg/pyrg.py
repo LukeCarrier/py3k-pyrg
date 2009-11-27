@@ -3,6 +3,7 @@
 from ConfigParser import ConfigParser
 from subprocess import Popen, PIPE
 from select import poll, POLLIN
+from optparse import OptionParser
 import sys
 import re
 import os
@@ -104,24 +105,60 @@ def coloring_method(line):
 def parse_unittest_result(lines):
     """parse test result"""
     results = []
-    err = re.compile("ERROR:")
-    fail = re.compile("FAIL:")
-    ok = re.compile("OK")
-    failed = re.compile("FAILED")
+    err_verbose = re.compile("ERROR:")
+    fail_verbose = re.compile("FAIL:")
+    unittests_ok = re.compile("OK")
+    unittests_failed = re.compile("FAILED")
     if not lines:
         return ""
     results.append(parse_lineone(lines[0]) + '\n')
     for line in lines[1:]:
-        if ok.match(line):
+        if unittests_ok.match(line):
             result = get_color('ok') % "OK"
-        elif failed.match(line):
+        elif unittests_failed.match(line):
             result = parse_result_line(line)
-        elif fail.match(line):
+        elif fail_verbose.match(line):
             result = "%s:%s" % (get_color('fail') % "FAIL",
                                 coloring_method(line[5:]))
-        elif err.match(line):
+        elif err_verbose.match(line):
             result = "%s:%s" % (get_color('error') % "ERROR",
                                 coloring_method(line[6:]))
+        else:
+            result = line
+        results.append(result)
+    return "".join(results)
+
+
+def parse_unittest_result_verbose(lines):
+    """parse test result, verbose print mode."""
+    ok = re.compile("ok$")
+    fail = re.compile("FAIL$")
+    err = re.compile("ERROR$")
+    fail_verbose = re.compile("FAIL:")
+    err_verbose = re.compile("ERROR:")
+    unittests_ok = re.compile("OK")
+    unittests_failed = re.compile("FAILED")
+    results = []
+    for line in lines:
+        if ok.search(line):
+            tmp = ok.split(line)
+            result = tmp[0] + get_color('ok') % "ok" + "\n"
+        elif fail.search(line):
+            tmp = fail.split(line)
+            result = tmp[0] + get_color('fail') % "FAIL" + "\n"
+        elif err.search(line):
+            tmp = err.split(line)
+            result = tmp[0] + get_color('error') % "ERROR" + "\n"
+        elif fail_verbose.match(line):
+            result = "%s:%s" % (get_color('fail') % "FAIL",
+                                coloring_method(line[5:]))
+        elif err_verbose.match(line):
+            result = "%s:%s" % (get_color('error') % "ERROR",
+                                coloring_method(line[6:]))
+        elif unittests_ok.match(line):
+            result = get_color('ok') % "OK"
+        elif unittests_failed.match(line):
+            result = parse_result_line(line)
         else:
             result = line
         results.append(result)
@@ -146,13 +183,30 @@ def set_configration():
     return
 
 
+def get_optionparser():
+    """return to optparse's OptionParser object."""
+    parser = OptionParser(version="pyrg: %s" % __version__,
+                          usage="Usage: pyrg [options] [TEST_SCRIPT.py]")
+    parser.add_option('-v', '--verbose', action='store_true',
+                      dest='mode_verbose',
+                      help='print to verbose result for unittest.')
+    return parser
+
+
 def main():
     """execute command line tool"""
     set_configration()
-    if sys.argv[1:]:
-        proc = Popen(['python', sys.argv[1]], stdout=PIPE, stderr=PIPE)
-        result = proc.communicate()[1]
-        print parse_unittest_result(result.splitlines(1))
+    parser = get_optionparser()
+    (opts, args) = parser.parse_args()
+    if len(args):
+        if opts.mode_verbose:
+            proc = Popen(['python', args[0], '-v'], stdout=PIPE, stderr=PIPE)
+            result = proc.communicate()[1]
+            print parse_unittest_result_verbose(result.splitlines(1))
+        else:
+            proc = Popen(['python', args[0]], stdout=PIPE, stderr=PIPE)
+            result = proc.communicate()[1]
+            print parse_unittest_result(result.splitlines(1))
     else:
         poller = poll()
         poller.register(sys.stdin, POLLIN)
