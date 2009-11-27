@@ -174,7 +174,6 @@ def set_configration():
     """setting to printing color map"""
     filename = get_configfile_path()
     if not os.path.exists(filename):
-        print "default configration"
         return
     configure = ConfigParser()
     configure.read(filename)
