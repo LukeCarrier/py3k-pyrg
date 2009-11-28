@@ -1,6 +1,7 @@
 import unittest
 import sys
 import os
+from tempfile import NamedTemporaryFile
 sys.path.insert(0, os.path.abspath("pyrg"))
 import pyrg
 
@@ -133,6 +134,30 @@ class TestColor(unittest.TestCase):
         colorname = self.id().split('_')[-1]
         self.assertEqual(True, colorname in pyrg.COLOR_MAP)
 
+
+class TestConfig(unittest.TestCase):
+
+    def test_notexist_file(self):
+        color_set = pyrg.set_configuration("/home/hogehoge/.pyrgrc")
+        self.assertEqual(pyrg.PRINT_COLOR_SET_DEFAULT, color_set)
+
+    def test_config(self):
+        config_example = """
+[color]
+ok = yellowgreen
+error = red
+fail = blue
+function = pink
+"""
+        temp = NamedTemporaryFile()
+        temp.file.write(config_example)
+        temp.file.flush()
+        color_set = pyrg.set_configuration(temp.name)
+        self.assertEqual('yellowgreen', color_set['ok'])
+        self.assertEqual('red', color_set['error'])
+        self.assertEqual('blue', color_set['fail'])
+        self.assertEqual('pink', color_set['function'])
+        temp.close()
 
 if __name__ == '__main__':
     unittest.main()
