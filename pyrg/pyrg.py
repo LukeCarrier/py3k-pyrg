@@ -14,9 +14,9 @@ __author__ = 'Hideo Hattroi <hhatto.jp@gmail.com>'
 __license__ = 'NewBSDLicense'
 
 __all__ = ['get_color', 'parse_result_line', 'parse_lineone',
-           'coloring_method', 'parse_unittest_result',
-           'get_configfile_path', 'set_configration']
+           'coloring_method', 'parse_unittest_result', 'set_configuration']
 
+DEFAULT_CONFIG_PATH = "/home/%s/.pyrgrc" % (pwd.getpwuid(os.getuid())[0])
 PRINT_COLOR_SET = {
         'ok': 'green',
         'fail': 'red',
@@ -26,7 +26,7 @@ PRINT_COLOR_SET = {
 COLOR_MAP = {
         'black': '[30m%s[0m',
         'gray': '[1;30m%s[0m',
-        #'black ': '[2;30m%s[0m',   ## TODO:not worked?
+        #'black ': '[2;30m%s[0m',   ## not work
         'red': '[31m%s[0m',
         'pink': '[1;31m%s[0m',
         'darkred': '[2;31m%s[0m',
@@ -166,14 +166,8 @@ def parse_unittest_result_verbose(lines):
     return "".join(results)
 
 
-def get_configfile_path():
-    """get $HOME/.pyrgrc path"""
-    return "/home/%s/.pyrgrc" % (pwd.getpwuid(os.getuid())[0])
-
-
-def set_configration():
+def set_configuration(filename):
     """setting to printing color map"""
-    filename = get_configfile_path()
     if not os.path.exists(filename):
         return
     configure = ConfigParser()
@@ -202,7 +196,7 @@ def check_verbose(line):
 
 def main():
     """execute command line tool"""
-    set_configration()
+    set_configuration(DEFAULT_CONFIG_PATH)
     parser = get_optionparser()
     (opts, args) = parser.parse_args()
     if len(args):
