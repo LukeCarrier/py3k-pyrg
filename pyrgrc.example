@@ -1,5 +1,5 @@
 [color]
 ok = green
-ng = red
+error = red
 fail = yellow
 function = cyan
