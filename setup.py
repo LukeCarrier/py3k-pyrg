@@ -9,7 +9,7 @@ import pyrg
 setup(
     name='pyrg',
     version=pyrg.__version__,
-    description="Python UnitTest Result colorized",
+    description="Python UnitTest Result colorized tool.",
     long_description=open("README").read(),
     license='New BSD License',
     author='Hideo Hattori',
