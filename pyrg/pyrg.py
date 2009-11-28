@@ -175,7 +175,12 @@ def set_configuration(filename):
     configure = ConfigParser()
     configure.read(filename)
     for item in configure.items('color'):
-        ret[item[0]] = item[1]
+        if not item[0] in PRINT_COLOR_SET:
+            continue
+        if item[1] in COLOR_MAP:
+            ret[item[0]] = item[1]
+        else:
+            ret[item[0]] = PRINT_COLOR_SET_DEFAULT[item[0]]
     return ret
 
 

@@ -159,5 +159,37 @@ function = pink
         self.assertEqual('pink', color_set['function'])
         temp.close()
 
+    def test_config_empty(self):
+        config_example = """
+[color]
+ok =
+error =
+fail =
+function =
+"""
+        temp = NamedTemporaryFile()
+        temp.file.write(config_example)
+        temp.file.flush()
+        color_set = pyrg.set_configuration(temp.name)
+        self.assertEqual(pyrg.PRINT_COLOR_SET_DEFAULT, color_set)
+        temp.close()
+
+    def test_config_nonkey_exist(self):
+        config_example = """
+[color]
+ok =
+error =
+hoge =
+fail =
+function =
+"""
+        temp = NamedTemporaryFile()
+        temp.file.write(config_example)
+        temp.file.flush()
+        color_set = pyrg.set_configuration(temp.name)
+        self.assertEqual(pyrg.PRINT_COLOR_SET_DEFAULT, color_set)
+        temp.close()
+
+
 if __name__ == '__main__':
     unittest.main()
