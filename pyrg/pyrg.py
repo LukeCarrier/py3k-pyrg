@@ -193,6 +193,11 @@ def get_optionparser():
     parser.add_option('-v', '--verbose', action='store_true',
                       dest='mode_verbose',
                       help='print to verbose result for unittest.')
+    parser.add_option('-d', '--default-color', action='store_true',
+                      dest='mode_defaultcolor',
+                      help='used to default color setting.')
+    parser.add_option('-f', '--config-file', dest='config_filename',
+                      help='configuration file path')
     return parser
 
 
@@ -204,9 +209,13 @@ def check_verbose(line):
 def main():
     """execute command line tool"""
     global PRINT_COLOR_SET
-    PRINT_COLOR_SET = set_configuration(DEFAULT_CONFIG_PATH)
     parser = get_optionparser()
     (opts, args) = parser.parse_args()
+    if not opts.mode_defaultcolor:
+        if opts.config_filename:
+            PRINT_COLOR_SET = set_configuration(opts.config_filename)
+        else:
+            PRINT_COLOR_SET = set_configuration(DEFAULT_CONFIG_PATH)
     if len(args):
         if opts.mode_verbose:
             proc = Popen(['python', args[0], '-v'], stdout=PIPE, stderr=PIPE)
