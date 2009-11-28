@@ -17,12 +17,13 @@ __all__ = ['get_color', 'parse_result_line', 'parse_lineone',
            'coloring_method', 'parse_unittest_result', 'set_configuration']
 
 DEFAULT_CONFIG_PATH = "/home/%s/.pyrgrc" % (pwd.getpwuid(os.getuid())[0])
-PRINT_COLOR_SET = {
+PRINT_COLOR_SET_DEFAULT = {
         'ok': 'green',
         'fail': 'red',
         'error': 'yellow',
         'function': 'cyan',
 }
+PRINT_COLOR_SET = PRINT_COLOR_SET_DEFAULT
 COLOR_MAP = {
         'black': '[30m%s[0m',
         'gray': '[1;30m%s[0m',
@@ -168,13 +169,14 @@ def parse_unittest_result_verbose(lines):
 
 def set_configuration(filename):
     """setting to printing color map"""
+    ret = {}
     if not os.path.exists(filename):
-        return
+        return PRINT_COLOR_SET_DEFAULT
     configure = ConfigParser()
     configure.read(filename)
     for item in configure.items('color'):
-        PRINT_COLOR_SET[item[0]] = COLOR_MAP[item[1]]
-    return
+        ret[item[0]] = item[1]
+    return ret
 
 
 def get_optionparser():
@@ -196,7 +198,8 @@ def check_verbose(line):
 
 def main():
     """execute command line tool"""
-    set_configuration(DEFAULT_CONFIG_PATH)
+    global PRINT_COLOR_SET
+    PRINT_COLOR_SET = set_configuration(DEFAULT_CONFIG_PATH)
     parser = get_optionparser()
     (opts, args) = parser.parse_args()
     if len(args):
