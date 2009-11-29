@@ -45,6 +45,116 @@ Ran 1 tests in 0.000s
         ret = pyrg.parse_unittest_result_verbose(input_strings.splitlines(1))
         self.assertEqual(ret, result_strings)
 
+    def test_failroute(self):
+        input_strings = """.F
+======================================================================
+FAIL: test_dummy_fail (__main__.TestDummy)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "test/test_pyrg_ng.py", line 140, in test_dummy_fail
+    self.assertEqual(1, 2)
+AssertionError: 1 != 2
+
+----------------------------------------------------------------------
+Ran 2 tests in 0.000s
+
+FAILED (failures=1)
+"""
+        result_strings = """[32m.[0m[31mF[0m
+======================================================================
+[31mFAIL[0m: [36mtest_dummy_fail (__main__.TestDummy)[0m
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "test/test_pyrg_ng.py", line 140, in test_dummy_fail
+    self.assertEqual(1, 2)
+AssertionError: 1 != 2
+
+----------------------------------------------------------------------
+Ran 2 tests in 0.000s
+
+[31mFAILED[0m ([31mfailures[0m=[31m1[0m)"""
+        ret = pyrg.parse_unittest_result(input_strings.splitlines(1))
+        self.assertEqual(ret, result_strings)
+
+    def test_errorroute(self):
+        input_strings = """.E
+======================================================================
+ERROR: test_dummy_error (__main__.TestDummy)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "test/test_pyrg_ng.py", line 143, in test_dummy_error
+    self.assertEqual(1, a)
+NameError: global name 'a' is not defined
+
+----------------------------------------------------------------------
+Ran 2 tests in 0.000s
+
+FAILED (errors=1)
+"""
+        result_strings = """[32m.[0m[1;33mE[0m
+======================================================================
+[1;33mERROR[0m: [36mtest_dummy_error (__main__.TestDummy)[0m
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "test/test_pyrg_ng.py", line 143, in test_dummy_error
+    self.assertEqual(1, a)
+NameError: global name 'a' is not defined
+
+----------------------------------------------------------------------
+Ran 2 tests in 0.000s
+
+[31mFAILED[0m ([1;33merrors[0m=[1;33m1[0m)"""
+        ret = pyrg.parse_unittest_result(input_strings.splitlines(1))
+        self.assertEqual(ret, result_strings)
+
+    def test_errorfailroute(self):
+        input_strings = """.EF
+======================================================================
+ERROR: test_dummy_error (__main__.TestDummy)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "test/test_pyrg_ng.py", line 143, in test_dummy_error
+    self.assertEqual(1, a)
+NameError: global name 'a' is not defined
+
+======================================================================
+FAIL: test_dummy_fail (__main__.TestDummy)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "test/test_pyrg_ng.py", line 140, in test_dummy_fail
+    self.assertEqual(1, 2)
+AssertionError: 1 != 2
+
+----------------------------------------------------------------------
+Ran 3 tests in 0.000s
+
+FAILED (failures=1, errors=1)
+"""
+        result_strings = """[32m.[0m[1;33mE[0m[31mF[0m
+======================================================================
+[1;33mERROR[0m: [36mtest_dummy_error (__main__.TestDummy)[0m
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "test/test_pyrg_ng.py", line 143, in test_dummy_error
+    self.assertEqual(1, a)
+NameError: global name 'a' is not defined
+
+======================================================================
+[31mFAIL[0m: [36mtest_dummy_fail (__main__.TestDummy)[0m
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "test/test_pyrg_ng.py", line 140, in test_dummy_fail
+    self.assertEqual(1, 2)
+AssertionError: 1 != 2
+
+----------------------------------------------------------------------
+Ran 3 tests in 0.000s
+
+[31mFAILED[0m ([31mfailures[0m=[31m1[0m, """\
+"""[1;33merrors[0m=[1;33m1[0m)"""
+        ret = pyrg.parse_unittest_result(input_strings.splitlines(1))
+        self.assertEqual(ret, result_strings)
+
 
 class TestColor(unittest.TestCase):
 

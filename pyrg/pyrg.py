@@ -68,7 +68,7 @@ def parse_result_line(line):
     if err and fail:
         f = line.split('=')[1].split(',')[0]
         e = line.split('=')[2].split(')')[0]
-        result = "(%s=%s. " % (get_color('fail') % "failures",
+        result = "(%s=%s, " % (get_color('fail') % "failures",
                                get_color('fail') % f)
         result += "%s=%s)" % (get_color('error') % "errors",
                               get_color('error') % e)
@@ -120,11 +120,11 @@ def parse_unittest_result(lines):
         elif unittests_failed.match(line):
             result = parse_result_line(line)
         elif fail_verbose.match(line):
-            result = "%s:%s" % (get_color('fail') % "FAIL",
-                                coloring_method(line[5:]))
+            result = "%s: %s\n" % (get_color('fail') % "FAIL",
+                                   coloring_method(line[6:-1]))
         elif err_verbose.match(line):
-            result = "%s:%s" % (get_color('error') % "ERROR",
-                                coloring_method(line[6:]))
+            result = "%s: %s\n" % (get_color('error') % "ERROR",
+                                   coloring_method(line[7:-1]))
         else:
             result = line
         results.append(result)
@@ -152,11 +152,11 @@ def parse_unittest_result_verbose(lines):
             tmp = err.split(line)
             result = tmp[0] + get_color('error') % "ERROR" + "\n"
         elif fail_verbose.match(line):
-            result = "%s:%s" % (get_color('fail') % "FAIL",
-                                coloring_method(line[5:]))
+            result = "%s: %s\n" % (get_color('fail') % "FAIL",
+                                   coloring_method(line[6:-1]))
         elif err_verbose.match(line):
-            result = "%s:%s" % (get_color('error') % "ERROR",
-                                coloring_method(line[6:]))
+            result = "%s: %s\n" % (get_color('error') % "ERROR",
+                                   coloring_method(line[7:-1]))
         elif unittests_ok.match(line):
             result = get_color('ok') % "OK"
         elif unittests_failed.match(line):
