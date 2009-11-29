@@ -13,8 +13,7 @@ class ColorFunctionTest(unittest.TestCase):
         self.assertEqual("[36mget_gg (__main__.TestTest)[0m",
                          pyrg.coloring_method(line))
 
-    def test_ngroute(self):
-        pass
+    def test_okroute(self):
         input_strings = """..
 ----------------------------------------------------------------------
 Ran 2 tests in 0.000s
@@ -29,6 +28,23 @@ Ran 2 tests in 0.000s
         ret = pyrg.parse_unittest_result(input_strings.splitlines(1))
         self.assertEqual(ret, result_strings)
 
+    def test_okroute_verbose(self):
+        input_strings = """test_dummy1 (__main__.TestDummy) ... ok
+
+----------------------------------------------------------------------
+Ran 1 tests in 0.000s
+
+OK
+"""
+        result_strings = """test_dummy1 (__main__.TestDummy) ... [32mok[0m
+
+----------------------------------------------------------------------
+Ran 1 tests in 0.000s
+
+[32mOK[0m"""
+        ret = pyrg.parse_unittest_result_verbose(input_strings.splitlines(1))
+        self.assertEqual(ret, result_strings)
+
 
 class TestColor(unittest.TestCase):
 
@@ -39,8 +55,11 @@ class TestColor(unittest.TestCase):
                              'magenta', 'lightmagenta', 'darkmagenta',
                              'cyan', 'lightcyan', 'darkcyan', 'silver',
                              'white', 'darksilver']
-        #self.test_color_define_offset += 1
         None
+
+    def test_colormap_key_nonkey(self):
+        colorname = self.id().split('_')[-1]
+        self.assertEqual(False, colorname in pyrg.COLOR_MAP)
 
     def test_colormap_key_black(self):
         colorname = self.id().split('_')[-1]
