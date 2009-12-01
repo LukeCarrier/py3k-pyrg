@@ -169,9 +169,9 @@ def parse_unittest_result_verbose(lines):
 
 def set_configuration(filename):
     """setting to printing color map"""
-    ret = {}
+    ret = PRINT_COLOR_SET_DEFAULT
     if not os.path.exists(filename):
-        return PRINT_COLOR_SET_DEFAULT
+        return ret
     configure = ConfigParser()
     configure.read(filename)
     for item in configure.items('color'):

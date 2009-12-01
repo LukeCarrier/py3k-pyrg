@@ -303,7 +303,7 @@ function =
         self.assertEqual(pyrg.PRINT_COLOR_SET_DEFAULT, color_set)
         temp.close()
 
-    def test_config_nonkey_exist(self):
+    def test_config_colorkey_notexist_all(self):
         config_example = """
 [color]
 ok =
@@ -311,6 +311,29 @@ error =
 hoge =
 fail =
 function =
+"""
+        temp = NamedTemporaryFile()
+        temp.file.write(config_example)
+        temp.file.flush()
+        color_set = pyrg.set_configuration(temp.name)
+        self.assertEqual(pyrg.PRINT_COLOR_SET_DEFAULT, color_set)
+        temp.close()
+
+    def test_config_keyword_notexist_4(self):
+        config_example = """
+[color]
+function =
+"""
+        temp = NamedTemporaryFile()
+        temp.file.write(config_example)
+        temp.file.flush()
+        color_set = pyrg.set_configuration(temp.name)
+        self.assertEqual(pyrg.PRINT_COLOR_SET_DEFAULT, color_set)
+        temp.close()
+
+    def test_config_keyword_notexist_all(self):
+        config_example = """
+[color]
 """
         temp = NamedTemporaryFile()
         temp.file.write(config_example)
