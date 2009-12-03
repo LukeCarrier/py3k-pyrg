@@ -5,7 +5,7 @@ install:
 	cp -p pyrg.py /usr/local/bin/pyrg && chmod 755 /usr/local/bin/pyrg
 
 tests:
-	python test/test_pyrg.py
+	python pyrg/pyrg.py test/test_pyrg.py
 
 pypireg:
 	python setup.py register
