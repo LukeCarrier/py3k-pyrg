@@ -9,12 +9,12 @@ import re
 import os
 import pwd
 
-__version__ = '0.2.4'
+__version__ = '0.2.5dev'
 __author__ = 'Hideo Hattroi <hhatto.jp@gmail.com>'
 __license__ = 'NewBSDLicense'
 
-__all__ = ['get_color', 'parse_result_line', 'parse_lineone',
-           'coloring_method', 'parse_unittest_result', 'set_configuration']
+__all__ = ['get_color', 'parse_unittest_result_verbose',
+           'parse_unittest_result', 'set_configuration']
 
 DEFAULT_CONFIG_PATH = "/home/%s/.pyrgrc" % (pwd.getpwuid(os.getuid())[0])
 PRINT_COLOR_SET_DEFAULT = {
@@ -23,7 +23,7 @@ PRINT_COLOR_SET_DEFAULT = {
         'error': 'yellow',
         'function': 'cyan',
 }
-PRINT_COLOR_SET = PRINT_COLOR_SET_DEFAULT
+PRINT_COLOR_SET = PRINT_COLOR_SET_DEFAULT.copy()
 COLOR_MAP = {
         'black': '[30m%s[0m',
         'gray': '[1;30m%s[0m',
@@ -169,18 +169,18 @@ def parse_unittest_result_verbose(lines):
 
 def set_configuration(filename):
     """setting to printing color map"""
-    ret = PRINT_COLOR_SET_DEFAULT
+    ret = PRINT_COLOR_SET_DEFAULT.copy()
     if not os.path.exists(filename):
         return ret
     configure = ConfigParser()
     configure.read(filename)
-    for item in configure.items('color'):
-        if not item[0] in PRINT_COLOR_SET:
+    for setkey, color in configure.items('color'):
+        if not setkey in PRINT_COLOR_SET:
             continue
-        if item[1] in COLOR_MAP:
-            ret[item[0]] = item[1]
+        if color in COLOR_MAP:
+            ret[setkey] = color
         else:
-            ret[item[0]] = PRINT_COLOR_SET_DEFAULT[item[0]]
+            ret[setkey] = PRINT_COLOR_SET_DEFAULT[setkey]
     return ret
 
 

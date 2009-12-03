@@ -1,4 +1,5 @@
 import unittest
+import ConfigParser
 import sys
 import os
 from tempfile import NamedTemporaryFile
@@ -270,6 +271,14 @@ class TestConfig(unittest.TestCase):
         color_set = pyrg.set_configuration("/home/hogehoge/.pyrgrc")
         self.assertEqual(pyrg.PRINT_COLOR_SET_DEFAULT, color_set)
 
+    def test_check_id(self):
+        default_color_id = id(pyrg.PRINT_COLOR_SET_DEFAULT)
+        setting_color_id = id(pyrg.PRINT_COLOR_SET)
+        get_color_id = id(pyrg.set_configuration(""))
+        self.assertNotEqual(default_color_id, setting_color_id)
+        self.assertNotEqual(default_color_id, get_color_id)
+        self.assertNotEqual(setting_color_id, get_color_id)
+
     def test_config(self):
         config_example = """
 [color]
@@ -285,6 +294,24 @@ function = pink
         self.assertEqual('yellowgreen', color_set['ok'])
         self.assertEqual('red', color_set['error'])
         self.assertEqual('blue', color_set['fail'])
+        self.assertEqual('pink', color_set['function'])
+        temp.close()
+
+    def test_config_inval_colorkey(self):
+        config_example = """
+[color]
+ok = white
+fail = red
+error = jihogeredd
+function = pink
+"""
+        temp = NamedTemporaryFile()
+        temp.file.write(config_example)
+        temp.file.flush()
+        color_set = pyrg.set_configuration(temp.name)
+        self.assertEqual('white', color_set['ok'])
+        self.assertEqual('yellow', color_set['error'])
+        self.assertEqual('red', color_set['fail'])
         self.assertEqual('pink', color_set['function'])
         temp.close()
 
@@ -340,6 +367,15 @@ function =
         temp.file.flush()
         color_set = pyrg.set_configuration(temp.name)
         self.assertEqual(pyrg.PRINT_COLOR_SET_DEFAULT, color_set)
+        temp.close()
+
+    def test_config_empty(self):
+        config_example = ""
+        temp = NamedTemporaryFile()
+        temp.file.write(config_example)
+        temp.file.flush()
+        self.assertRaises(ConfigParser.NoSectionError,
+                          pyrg.set_configuration, temp.name)
         temp.close()
 
 
