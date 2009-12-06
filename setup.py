@@ -16,7 +16,7 @@ setup(
     author_email='hhatto.jp@gmail.com',
     url='http://www.hexacosa.net/project/pyrg/',
     classifiers=[
-        'Development Status :: 3 - Alpha',
+        'Development Status :: 4 - Beta',
         'Intended Audience :: Developers',
         'Environment :: Console',
         'Operating System :: Unix',
