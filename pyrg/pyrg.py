@@ -236,7 +236,7 @@ def main():
             else:
                 print parse_unittest_result(lines)
         else:
-            print parser.print_help()
+            parser.print_help()
 
 if __name__ == '__main__':
     sys.exit(main())
