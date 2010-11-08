@@ -30,6 +30,10 @@ verbose print usage::
 
   $ python TEST_SCRIPT.py -v |& pyrg
 
+specified testcase::
+
+  $ pyrg TEST_SCRIPT.py TestCase.test_foo
+
 
 Configuration
 =============

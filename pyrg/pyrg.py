@@ -9,7 +9,7 @@ import re
 import os
 import pwd
 
-__version__ = '0.2.5'
+__version__ = '0.2.6'
 __author__ = 'Hideo Hattroi <hhatto.jp@gmail.com>'
 __license__ = 'NewBSDLicense'
 
