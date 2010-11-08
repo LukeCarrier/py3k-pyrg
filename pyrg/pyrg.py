@@ -218,11 +218,16 @@ def main():
             PRINT_COLOR_SET = set_configuration(DEFAULT_CONFIG_PATH)
     if len(args):
         if opts.mode_verbose:
-            proc = Popen(['python', args[0], '-v'], stdout=PIPE, stderr=PIPE)
+            cmdline = ['python', args[0], '-v']
+            if len(args) >= 2:
+                cmdline += [i for i in args[1:]]
+            proc = Popen(cmdline, stdout=PIPE, stderr=PIPE)
             result = proc.communicate()[1]
             print parse_unittest_result_verbose(result.splitlines(1))
         else:
-            proc = Popen(['python', args[0]], stdout=PIPE, stderr=PIPE)
+            cmdline = ['python']
+            cmdline += [i for i in args]
+            proc = Popen(cmdline, stdout=PIPE, stderr=PIPE)
             result = proc.communicate()[1]
             print parse_unittest_result(result.splitlines(1))
     else:
