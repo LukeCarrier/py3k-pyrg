@@ -1,0 +1,7 @@
+./*.pyc
+.*rope*
+.*egg-info*
+dist
+build
+pyrg/__pycache__/
+pyrg/pyrg.egg-info/
