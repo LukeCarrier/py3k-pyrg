@@ -1,5 +1,5 @@
 import unittest
-import ConfigParser
+import configparser
 import sys
 import os
 from tempfile import NamedTemporaryFile
@@ -388,7 +388,7 @@ function =
         temp = NamedTemporaryFile()
         temp.file.write(config_example)
         temp.file.flush()
-        self.assertRaises(ConfigParser.NoSectionError,
+        self.assertRaises(configparser.NoSectionError,
                           pyrg.set_configuration, temp.name)
         temp.close()
 
